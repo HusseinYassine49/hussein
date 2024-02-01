@@ -18,50 +18,6 @@ $leftPhotos = $_FILES['leftPhotos'];
 $intPhotos = $_FILES['intPhotos'];
 
 
-// function uploadPhotos($file, $type)
-// {
-//     // $uploadedPhotoPath = '';
-
-//     // $targetDir = "image/"; // Specify your upload directory
-//     // $targetFile = $targetDir . basename($file['name']);
-//     // $uploadOk = 1;
-//     // $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-
-//     // // Check if file already exists
-//     // if (file_exists($targetFile)) {
-//     //     echo "Sorry, file already exists.";
-//     //     $uploadOk = 0;
-//     // }
-
-//     // // Check file size
-//     // if ($file['size'] > 5000000) { // Adjust the file size limit as needed
-//     //     echo "Sorry, your file is too large.";
-//     //     $uploadOk = 0;
-//     // }
-
-//     // // Allow certain file formats
-//     // $allowedFormats = ['jpg', 'jpeg', 'png', 'gif']; // Add or remove formats as needed
-//     // if (!in_array($imageFileType, $allowedFormats)) {
-//     //     echo "Sorry, only JPG, JPEG, PNG, GIF files are allowed.";
-//     //     $uploadOk = 0;
-//     // }
-
-//     // if ($uploadOk) {
-//     //     if (move_uploaded_file($file['tmp_name'], $targetFile)) {
-//     //         $uploadedPhotoPath = $targetFile;
-//     //     } else {
-//     //         echo "Sorry, there was an error uploading your file.";
-//     //     }
-//     // }
-
-//     // // Store the photo path in the database or perform other operations
-//     // // ...
-
-//     // return $uploadedPhotoPath;
-
-// };
-
-
 
 // Handle file uploads for each photo type
 $frontPhotoPaths = uploadPhotos($frontPhotos);

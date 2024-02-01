@@ -65,27 +65,70 @@ function insertPhotoPaths($carId, $photoPaths, $type)
     $insertQuery = "INSERT INTO `image` (`id_car`, `photo`, `type`) VALUES ('$carId', '$photoPaths', '$type')";
     mysqli_query($conn, $insertQuery);
 };
-// function add($username, $password, $Model, $Cylinder, $Season, $Brand, $Hit, $Time, $Price,)
-// {
-//     global $conn;
-//     if (password($username, $password) == true) {
-
-//         $query = "INSERT INTO `car` (`Model`, `Cylinder`, `Season`, `Brand`, `Hit`, `Time`, `Price`) 
-//         VALUES ('$Model', '$Cylinder', '$Season', '$Brand', '$Hit', '$Time', '$Price')";
-
-//         $result = mysqli_query($conn, $query);
 
 
+function addcustom($fname, $lname, $phone, $email, $address1, $city, $username, $password, $Time)
+{
+    global $conn;
+    if (password($username, $password) == true) {
 
-//         $logQuery = "INSERT INTO `log_entry`(`username`, `action`, `Time`) VALUES ('$username','add a car','$Time')";
-//         $logResult = mysqli_query($conn, $logQuery);
+        $query = " INSERT INTO `customer`( `fname`, `lname`, `email`, `phone`, `address1`, `city`) 
+        VALUES ('$fname','$lname','$email','$phone','$address1','$city')";
+        $result = mysqli_query($conn, $query);
+        if ($result) {
+            $carId = mysqli_insert_id($conn);
+            $logQuery = "INSERT INTO `log_entry`(`carId`,`username`, `action`, `Time`)
+             VALUES ('$carId','$username','add customer','$Time')";
+            $logResult = mysqli_query($conn, $logQuery);
 
-//         if ($logResult) {
-//             echo true; // Success
-//         } else {
-//             echo mysqli_error($conn); // Log entry insertion failed
-//         }
-//     } else {
-//         echo mysqli_error($conn); // Car insertion failed
-//     }
-// }
+            if ($logResult) {
+                echo true; // Success
+            } else {
+                echo mysqli_error($conn); // Log entry insertion failed
+            }
+        }
+    }
+};
+
+function editcustom($fname, $lname, $phone, $email, $address1, $city, $username, $password, $Time, $customerid)
+{
+    global $conn;
+    if (password($username, $password) == true) {
+        $query = "UPDATE `customer` SET `fname`='$fname',`lname`='$lname',`email`='$email',`phone`='$phone',`address1`='$address1',`city`='$city' WHERE `id`='$customerid'";
+
+        $result = mysqli_query($conn, $query);
+        if ($result) {
+            $carId = mysqli_insert_id($conn);
+            $logQuery = "INSERT INTO `log_entry`(`carId`,`username`, `action`, `Time`)
+             VALUES ('$carId','$username','edit customer','$Time')";
+            $logResult = mysqli_query($conn, $logQuery);
+
+            if ($logResult) {
+                echo true; // Success
+            } else {
+                echo mysqli_error($conn); // Log entry insertion failed
+            }
+        }
+    }
+};
+function deletcustomer($fname, $lname, $phone, $email, $address1, $city, $username, $password, $Time, $customerid)
+{
+    global $conn;
+    if (password($username, $password) == true) {
+        $query = "DELETE FROM `customer` WHERE `id`='$customerid'";
+
+        $result = mysqli_query($conn, $query);
+        if ($result) {
+            $carId = mysqli_insert_id($conn);
+            $logQuery = "INSERT INTO `log_entry`(`carId`,`username`, `action`, `Time`)
+             VALUES ('$carId','$username','delet customer','$Time')";
+            $logResult = mysqli_query($conn, $logQuery);
+
+            if ($logResult) {
+                echo true; // Success
+            } else {
+                echo mysqli_error($conn); // Log entry insertion failed
+            }
+        }
+    }
+}
