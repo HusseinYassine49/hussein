@@ -131,4 +131,27 @@ function deletcustomer($fname, $lname, $phone, $email, $address1, $city, $userna
             }
         }
     }
-}
+};
+function addorder($username, $password, $fname, $lname, $dateS, $dateE, $carid, $price, $pay)
+{
+    global $conn;
+    if (password($username, $password) == true) {
+
+        $query = " INSERT INTO `rental`(  `username`, `fname`, `lname`, `idcar`, `start`, `end`, `price`, `pay`) 
+        VALUES ('$username','$fname','$lname','$carid','$dateS','$dateE','$price','$pay')";
+        $result = mysqli_query($conn, $query);
+        if ($result) {
+            $carId = mysqli_insert_id($conn);
+            $Time = date("Y-m-d H:i:s");
+            $logQuery = "INSERT INTO `log_entry`(`carId`,`username`, `action`, `Time`)
+             VALUES ('$carId','$username','add order for $fname $lname ','$Time')";
+            $logResult = mysqli_query($conn, $logQuery);
+
+            if ($logResult) {
+                echo true; // Success
+            } else {
+                echo mysqli_error($conn); // Log entry insertion failed
+            }
+        }
+    }
+};

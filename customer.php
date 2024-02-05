@@ -40,19 +40,19 @@ include "connect.php";
     <!-- <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 
     <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
-        }
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
 
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+            font-size: 3.5rem;
         }
+    }
     </style>
 
 
@@ -64,7 +64,9 @@ include "connect.php";
 
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
         <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Company name</a>
-        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+            aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <button><a class="nav-link px-3" href="addcustomer.php">addCustomer</a></button>
@@ -138,7 +140,7 @@ include "connect.php";
                         // Fetch data and display cards
                         while ($row = mysqli_fetch_assoc($result)) {
                             echo '<div class="card border-success mb-3" style="max-width: 18rem;">';
-                            echo '<div class="card-header bg-transparent border-success">' . $row['id'] . '</div>';
+                            echo '<div class="card-header bg-transparent border-success"><b>' . $row['id'] . ' _ </b><a href="view.php"><button>payment</button></a></div>';
                             echo '<div class="card-body text-success">';
                             echo '<h5 class="card-title">' . $row['fname'] . ' ' . $row['lname'] . '</h5>';
                             echo '<p class="card-text">' . $row['address1'] . ', ' . $row['city'] . '<br>Phone: ' . $row['phone'] . '</p>';
@@ -168,9 +170,11 @@ include "connect.php";
 
     <!-- <script src="../assets/dist/js/bootstrap.bundle.min.js"></script> -->
 
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+        integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous">
     </script>
     <script src="dashboard.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
@@ -179,53 +183,53 @@ include "connect.php";
 
 </html>
 <script>
-    /* globals Chart:false, feather:false */
+/* globals Chart:false, feather:false */
 
-    (function() {
-        'use strict'
+(function() {
+    'use strict'
 
-        feather.replace({
-            'aria-hidden': 'true'
-        })
+    feather.replace({
+        'aria-hidden': 'true'
+    })
 
-        // Graphs
-        var ctx = document.getElementById('myChart')
-        // eslint-disable-next-line no-unused-vars
+    // Graphs
+    var ctx = document.getElementById('myChart')
+    // eslint-disable-next-line no-unused-vars
 
-    })();
+})();
 </script>
 <script>
-    function deleteCustomer(customerId) {
-        // You can use AJAX to send the customer ID to a deletion script
-        $.ajax({
-            url: 'delete_customer.php',
-            type: 'POST',
-            data: {
-                id: customerId
-            },
-            success: function(response) {
-                // Handle the response if needed
-                console.log(response);
-                // Reload the page or update the customer list
-                location.reload();
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert(errorThrown);
-            }
-        });
-    }
+function deleteCustomer(customerId) {
+    // You can use AJAX to send the customer ID to a deletion script
+    $.ajax({
+        url: 'delet_customer.php',
+        type: 'POST',
+        data: {
+            id: customerId
+        },
+        success: function(response) {
+            // Handle the response if needed
+            console.log(response);
+            // Reload the page or update the customer list
+            location.reload();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert(errorThrown);
+        }
+    });
+}
 
-    /* globals Chart:false, feather:false */
+/* globals Chart:false, feather:false */
 
-    (function() {
-        'use strict'
+(function() {
+    'use strict'
 
-        feather.replace({
-            'aria-hidden': 'true'
-        })
+    feather.replace({
+        'aria-hidden': 'true'
+    })
 
-        // Graphs
-        var ctx = document.getElementById('myChart')
-        // eslint-disable-next-line no-unused-vars
-    })();
+    // Graphs
+    var ctx = document.getElementById('myChart')
+    // eslint-disable-next-line no-unused-vars
+})();
 </script>

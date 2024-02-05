@@ -345,37 +345,43 @@ $('#addbrandbutton').click(function() {
     });
 });
 
-$('#myForm').on('submit', function(e) {
 
+
+$('#myForm').on('submit', function(e) {
     var file = $('input[type="file"]').val().trim();
     var formData = new FormData($(this)[0]);
     e.preventDefault();
-    var postData = $(this).serializeArray();
-
     console.log($(this).serializeArray());
-
-    $.ajax({
-        url: 'addcarr.php', // Corrected URL to match form action
-        type: 'POST',
-        data: $(this).serializeArray(),
-        file,
-        success: function(data) {
-            console.log(data); // Log the response for debugging
-            if (data) {
-                popup("success");
-            } else {
-                popup("error", "Error: " + data, "Error while updating, double check the fields!");
+    if (file) {
+        $.ajax({
+            url: 'addcarr.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                if (data > 0) {
+                    var table = $('#mytable').DataTable();
+                    table.ajax.reload();
+                    $(this).trigger('reset');
+                    document.getElementById('theForm');
+                    popup("success", "Success", "Doctor successfully inserted!");
+                } else {
+                    popup("error", data,
+                        "Error while updating, double check the fields!");
+                }
+            },
+            error: function(jXHR, textStatus, errorThrown) {
+                alert(errorThrown);
             }
-        },
-        error: function(jXHR, textStatus, errorThrown) {
-            alert(errorThrown);
-        }
-    });
+        });
+    }
 });
+
 
 function popup($type, $title, $message) {
     Swal.fire({
-        type: $type,
+        icon: $type,
         title: $title,
         html: $message
 
