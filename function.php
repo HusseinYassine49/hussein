@@ -155,3 +155,61 @@ function addorder($username, $password, $fname, $lname, $dateS, $dateE, $carid, 
         }
     }
 };
+function addmaintenance($username, $password, $carid, $Model, $maintenance)
+{
+    global $conn;
+    if (password($username, $password) == true) {
+        $squery = "SELECT * FROM maintenance WHERE id_car='$carid'";
+        $sresult = mysqli_query($conn, $squery);
+        $row = mysqli_fetch_assoc($sresult);
+
+        if ($row['id_car'] == $carid && $row['type'] == 'notpaid') {
+        } else {
+            $query = "INSERT INTO `maintenance`(`id_car`, `pay`,`type`,`maintenance`) VALUES ('$carid',0,'notpaid','$maintenance')";
+            $result = mysqli_query($conn, $query);
+            if ($result) {
+                $editQuery = "UPDATE `car` SET `Hit`='$maintenance' WHERE id='$carid'";
+                $editresult = mysqli_query($conn, $editQuery);
+
+                $Time = date("Y-m-d H:i:s");
+                $logQuery = "INSERT INTO `log_entry`(`carId`,`username`, `action`, `Time`)
+            VALUES ('$carid','$username','add hit for $Model id:$carid','$Time')";
+                $logResult = mysqli_query($conn, $logQuery);
+            }
+        }
+    }
+};
+function paymaintenance($id, $price)
+{
+    global $conn;
+
+    // Fetch information for the specified $id
+    $query = "SELECT * FROM maintenance WHERE id='$id'";
+    $result = mysqli_query($conn, $query);
+
+    if ($result) {
+        $row = mysqli_fetch_assoc($result);
+
+        // Update maintenance table
+        $payquery = "UPDATE `maintenance` SET `pay`='$price', `type`='paid' WHERE `id`='$id'";
+        $payresult = mysqli_query($conn, $payquery);
+
+        // Check if the maintenance update was successful
+        if ($payresult) {
+            // Update car table
+            $editQuery = "UPDATE `car` SET `Hit`='no maintenance' WHERE id='" . $row['id_car'] . "'";
+            $editresult = mysqli_query($conn, $editQuery);
+
+            if (!$editresult) {
+                // Handle the case where the car table update fails
+                echo "Error updating car table: " . mysqli_error($conn);
+            }
+        } else {
+            // Handle the case where the maintenance table update fails
+            echo "Error updating maintenance table: " . mysqli_error($conn);
+        }
+    } else {
+        // Handle the case where fetching maintenance information fails
+        echo "Error fetching maintenance information: " . mysqli_error($conn);
+    }
+}

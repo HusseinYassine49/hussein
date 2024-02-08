@@ -85,8 +85,8 @@ include "connect.php";
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="order.php">
-                                <span data-feather="file"></span> Orders
+                            <a class="nav-link" href="addhit.php">
+                                <span data-feather="file"></span> new maintenance
                             </a>
                         </li>
                         <li class="nav-item">
@@ -105,8 +105,8 @@ include "connect.php";
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="layers"></span> Integrations
+                            <a class="nav-link" href="paymaintenance.php">
+                                <span data-feather="layers"></span> paymaintenance
                             </a>
                         </li>
                     </ul>

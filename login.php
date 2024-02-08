@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($user['role'] == 'admin') {
             header("Location: dashboard.php");
         } else {
-            header("Location: boarder.php");
+            header("Location: dashboard.php");
         }
     } else {
         $_SESSION['message'] = 'Username or password is incorrect.';

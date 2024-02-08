@@ -1,3 +1,19 @@
+<?php
+include "connect.php";
+global $conn;
+
+session_start();
+
+// Check if the user is logged in
+
+
+// Check user role for permission control
+$isAdmin = ($_SESSION['role'] === 'admin');
+
+// Check if the role is passed as a GET parameter
+$roleFromURL = isset($_GET['role']) ? $_GET['role'] : '';
+
+?>
 <!doctype html>
 <html lang="en">
 
@@ -85,8 +101,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="order.php">
-                                <span data-feather="file"></span> Orders
+                            <a class="nav-link" href="addhit.php">
+                                <span data-feather="file"></span> new maintenance
                             </a>
                         </li>
                         <li class="nav-item">
@@ -105,10 +121,18 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="layers"></span> Integrations
+                            <a class="nav-link" href="paymaintenance.php">
+                                <span data-feather="layers"></span> paymaintenance
                             </a>
                         </li>
+                        <?php
+                        if ($isAdmin) {
+                            echo ' <li class="nav-item">
+                        <a class="nav-link" href="actionuser.php">
+                            <span data-feather="users"></span> action user 
+                        </a>
+                    </li>';
+                        } ?>
                     </ul>
 
                 </div>
@@ -120,33 +144,41 @@
 
                         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                             <?php
-                            include "connect.php";
-                            global $conn;
+
+
+
+
                             $query = 'SELECT `id`, `Model`, `Cylinder`, `Season`, `Brand`, `Hit`, `Time`, `Price` FROM `car` ';
                             $result = mysqli_query($conn, $query);
                             if ($result) {
                                 while ($row = mysqli_fetch_assoc($result)) {
-                                    echo ' <div class="col">';
-                                    echo ' <div class="card shadow-sm">';
-                                    echo ' <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: this image from diferrent tabel wen her type is interface" preserveAspectRatio="xMidYMid slice" focusable="false">';
-                                    echo ' <title>car</title>';
-                                    echo ' <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef" dy=".3em">' . $row['id'] . '</text>';
-                                    echo ' </svg>';
+                                    // Fetching photo for the current car
+                                    $queryphoto = "SELECT `photo` FROM `image` WHERE `type`='front' AND `id_car`={$row['id']}";
+                                    $resultphoto = mysqli_query($conn, $queryphoto);
+                                    $photo_row = mysqli_fetch_assoc($resultphoto);
+                                    $queryadmin = "SELECT ";
 
-                                    echo ' <div class="card-body">';
-                                    echo ' <p class="card-text">.model: ' . $row['Model'] . ',<br> cylinder: ' . $row['Cylinder'] . ',<br> season: ' . $row['Season'] . ',<br> brand: ' . $row['Brand'] . '  ,<br>hit: ' . $row['Hit'];
+                                    echo '<div class="col">';
+                                    echo '<div class="card shadow-sm">';
+                                    echo '<img src="' . $photo_row['photo'] . '" alt="Car Photo" class="bd-placeholder-img card-img-top" width="100%" height="225">';
+                                    echo '<h5 class="card-text">' . $row['id'] . ' </h5>';
+                                    echo '<div class="card-body">';
+                                    echo '<p class="card-text">Model: ' . $row['Model'] . '<br>Cylinder: ' . $row['Cylinder'] . '<br>Season: ' . $row['Season'] . '<br>Brand: ' . $row['Brand'] . '<br>Hit: ' . $row['Hit'] . '</p>';
+                                    echo '<div class="d-flex justify-content-between align-items-center">';
+                                    echo '<div class="btn-group">';
+                                    echo '<button type="button" class="btn btn-sm btn-outline-secondary"><a href="view.php?id=' . $row['id'] . '" class="btn btn-sm btn-outline">View</a></button>';
+                                    echo '<button type="button" class="btn btn-sm btn-outline-success"><a href="order.php?id=' . $row['id'] . '" class="btn btn-sm btn-outline">Order</a></button>';
 
-                                    echo ' </p>';
-                                    echo ' <div class="d-flex justify-content-between align-items-center">';
-                                    echo ' <div class="btn-group">';
-                                    echo ' <button type="button" class="btn btn-sm btn-outline-secondary"><a href="view.php?id=' . $row['id'] . '" class="btn btn-sm btn-outline-secondary">View</a></button>';
-                                    echo ' <button type="button" class="btn btn-sm btn-outline-secondary"><a href="order.php?id=' . $row['id'] . '" class="btn btn-sm btn-outline-secondary">Order</a></button>';
-                                    echo ' </div>';
-                                    echo ' <small class="text-muted">' . $row['Price'] . '$</small>';
-                                    echo ' </div>';
-                                    echo ' </div>';
-                                    echo ' </div>';
-                                    echo ' </div>';
+                                    if ($isAdmin) {
+                                        echo '<button type="button" class="btn btn-sm btn-outline-danger" onclick="deletecarr(' . $row['id'] . ') " class="btn btn-sm btn-outline-secondary"">Delete</button>';
+                                    }
+
+                                    echo '</div>';
+                                    echo '<small class="text-muted">' . $row['Price'] . '$</small>';
+                                    echo '</div>';
+                                    echo '</div>';
+                                    echo '</div>';
+                                    echo '</div>';
                                 }
                             }
 
@@ -170,19 +202,40 @@
 
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
         integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
+
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
         integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous">
     </script>
-    <script src="dashboard.js"></script>
+
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </body>
 
 </html>
 <script>
 /* globals Chart:false, feather:false */
-
+function deletecarr(customerId) {
+    // You can use AJAX to send the customer ID to a deletion script
+    $.ajax({
+        url: 'deletcarr.php',
+        type: 'POST',
+        data: {
+            id: customerId
+        },
+        success: function(response) {
+            // Handle the response if needed
+            console.log(response);
+            // Reload the page or update the customer list
+            location.reload();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert(errorThrown);
+        }
+    });
+};
 (function() {
     'use strict'
 
@@ -194,5 +247,5 @@
     var ctx = document.getElementById('myChart')
     // eslint-disable-next-line no-unused-vars
 
-})()
+})();
 </script>

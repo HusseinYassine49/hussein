@@ -1,3 +1,6 @@
+<?php
+include "connect.php";
+?>
 <!doctype html>
 <html lang="en">
 
@@ -37,19 +40,19 @@
     <!-- <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 
     <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
-        }
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
 
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+            font-size: 3.5rem;
         }
+    }
     </style>
 
 
@@ -61,7 +64,9 @@
 
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
         <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Company name</a>
-        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+            aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -83,8 +88,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="order.php">
-                                <span data-feather="file"></span> Orders
+                            <a class="nav-link" href="addhit.php">
+                                <span data-feather="file"></span> new maintenance
                             </a>
                         </li>
                         <li class="nav-item">
@@ -103,8 +108,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="layers"></span> Integrations
+                            <a class="nav-link" href="paymaintenance.php">
+                                <span data-feather="layers"></span> paymaintenance
                             </a>
                         </li>
                     </ul>
@@ -119,43 +124,61 @@
                     <div class="form-group col-md-6">
                         <label for="inputEmail4">Username</label>
                         <div class="form-group">
-                            <select class="form-control" id="exampleFormControlSelect1" required>
-                                <option value="">Select an option</option>
-                                <option>1</option>
-                                <!-- Add more options as needed -->
+
+                            <select class="form-control" id="user" name="username">
+                                <?php
+                                // Fetch usernames from the database and populate the dropdown
+                                $query = "SELECT username FROM user";
+                                $result = mysqli_query($conn, $query);
+
+                                if ($result && mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        echo "<option value='" . $row['username'] . "'>" . $row['username'] . "</option>";
+                                    }
+                                }
+                                ?>
+
                             </select>
                         </div>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="inputPassword4">Password</label>
-                        <input type="password" class="form-control" id="inputPassword4" required>
+                        <input type="password" class="form-control" id="inputPassword4" name="password" required>
                         <div class="invalid-tooltip">
-                            Please choose a unique and valid password.
+                            Please choose a unique and valid username.
                         </div>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="selc">Customer name</label>
+                        <label for="selc">Customer id</label>
                         <div class="form-group">
-                            <select class="form-control" id="selc" required>
-                                <option value="">Select an option</option>
-                                <option>1</option>
-                                <!-- Add more options as needed -->
+                            <select class="form-control" id="id" name="id" method="get">
+                                <?php
+                                // Fetch usernames from the database and populate the dropdown
+                                $query = "SELECT id FROM customer";
+                                $result = mysqli_query($conn, $query);
+
+                                if ($result && mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        echo "<option value='" . $row['id'] . "'>" . $row['id'] . "</option>";
+                                    }
+                                }
+                                ?>
+
                             </select>
                         </div>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="sell">Last name</label>
+                        <label for="sell">customer name</label>
                         <div class="form-group">
-                            <select class="form-control" id="sell" required>
-                                <option value="">Select an option</option>
-                                <option>1</option>
-                                <!-- Add more options as needed -->
+                            <select class="form-control" id="fname" name="fname">
+                                <!-- Last names will be dynamically populated based on the selected first name -->
                             </select>
                         </div>
                     </div>
+
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-4">
@@ -183,29 +206,80 @@
 
     <!-- <script src="../assets/dist/js/bootstrap.bundle.min.js"></script> -->
 
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+        integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous">
     </script>
-    <script src="dashboard.js"></script>
+
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 </body>
 
 </html>
 <script>
-    /* globals Chart:false, feather:false */
+/* globals Chart:false, feather:false */
 
-    (function() {
-        'use strict'
+$(document).ready(function() {
+    $('select[name="id"]').change(function() {
+        // Get the selected first name
+        var selectedId = $(this).val();
 
-        feather.replace({
-            'aria-hidden': 'true'
-        })
+        // Make an AJAX request to get_first_names.php
+        $.ajax({
+            type: 'GET',
+            url: 'get_firs_names.php',
+            data: {
+                id: selectedId,
+            },
+            success: function(data) {
+                // Update the last name dropdown with the fetched options
+                $('#fname').html(data);
+            },
+            error: function() {
+                console.error('Error fetching last names.');
+            }
+        });
+    });
+});
 
-        // Graphs
-        var ctx = document.getElementById('myChart')
-        // eslint-disable-next-line no-unused-vars
+(function() {
+    'use strict'
 
-    })()
+    feather.replace({
+        'aria-hidden': 'true'
+    })
+
+    // Graphs
+    var ctx = document.getElementById('myChart')
+    // eslint-disable-next-line no-unused-vars
+
+})();
+
+$(document).ready(function() {
+    // Event handler for when the customer's first name dropdown changes
+    $('#fname').change(function() {
+        $('select[name="fname"]').change(function() {
+            // Get the selected first name
+            var selectedfname = $(this).val();
+
+            // Make an AJAX request to get_first_names.php
+            $.ajax({
+                type: 'GET',
+                url: 'get_last_names.php',
+                data: {
+                    id: selectedname,
+                },
+                success: function(data) {
+                    // Update the last name dropdown with the fetched options
+                    $('#lname').html(data);
+                },
+                error: function() {
+                    console.error('Error fetching last names.');
+                }
+            });
+        });
+    });
+});
 </script>

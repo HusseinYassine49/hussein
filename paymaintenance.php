@@ -1,5 +1,18 @@
 <?php
 include "connect.php";
+global $conn;
+
+session_start();
+
+// Check if the user is logged in
+
+
+// Check user role for permission control
+$isAdmin = ($_SESSION['role'] === 'admin');
+
+// Check if the role is passed as a GET parameter
+$roleFromURL = isset($_GET['role']) ? $_GET['role'] : '';
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -69,8 +82,8 @@ include "connect.php";
             aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <button><a class="nav-link px-3" href="addcustomer.php">addCustomer</a></button>
-        <form class="d-flex" method="GET" action="customer.php">
+
+        <form class="d-flex" method="GET" action="paymaintenance.php">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
@@ -128,28 +141,72 @@ include "connect.php";
 
                     if (isset($_GET['search']) && $_GET['search'] != '') {
                         $searchQuery = $_GET['search'];
-                        $query = "SELECT id, fname, lname, address1, city, phone FROM customer WHERE fname LIKE '$searchQuery' OR lname LIKE '$searchQuery'";
+                        $query = "SELECT `id`, `id_car`, `pay`, `type`,`maintenance` FROM `maintenance` WHERE id LIKE '$searchQuery' OR id_car LIKE '$searchQuery' ORDER BY `type` ASC ";
                     } else {
-                        $query = "SELECT id, fname, lname, address1, city, phone FROM customer";
+                        $query = "SELECT `id`, `id_car`, `pay`, `type`,`maintenance` FROM `maintenance`ORDER BY `type` ASC ";
                     }
 
 
                     $result = mysqli_query($conn, $query);
 
                     if ($result) {
-                        // Fetch data and display cards
                         while ($row = mysqli_fetch_assoc($result)) {
-                            echo '<div class="card border-success mb-3" style="max-width: 18rem;">';
-                            echo '<div class="card-header bg-transparent border-success"><b>' . $row['id'] . ' _ </b><a href="view.php"><button>payment</button></a></div>';
-                            echo '<div class="card-body text-success">';
-                            echo '<h5 class="card-title">' . $row['fname'] . ' ' . $row['lname'] . '</h5>';
-                            echo '<p class="card-text">' . $row['address1'] . ', ' . $row['city'] . '<br>Phone: ' . $row['phone'] . '</p>';
-                            echo '</div>';
+                            $id = $row['id_car'];
+                            $iquery = "SELECT `Hit` FROM `car` WHERE id like '$id'  ";
+                            $iresult = mysqli_query($conn, $iquery);
+                            $irow = mysqli_fetch_assoc($iresult);
 
-                            echo '<button type="button" class="btn btn-sm btn-outline-secondary"><a href="edit.php?id=' . $row['id'] . '" class="btn btn-sm btn-outline-secondary">Edit</a></button>';
-                            echo '<button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteCustomer(' . $row['id'] . ')">Delete</button>';
-                            echo '</div>';
-                        }
+                            // Check payment status and add to appropriate array
+                            if ($row['type'] == 'notpaid' || $row['type'] == 'notpayd') {
+                                echo '<div class="card border-danger mb-3" style="max-width: 18rem;">';
+                                echo '<div class="card-header bg-transparent border-danger"><b>' . $row['id'] . ' _ </b></div>';
+                                echo '<div class="card-body text-danger">';
+                                echo '<h5 class="card-title">' . $row['id_car'] . ' ' . $row['type'] . '</h5>';
+                                echo '<p class="card-text">' . $irow['Hit'] . ' </p>';
+                                echo '</div>';
+                                if ($isAdmin) {
+                                    echo '<button type="button" class="btn btn-primary" data-toggle="modal" id="payybutton" data-maintenance-id="' . $row['id'] . '"
+                                    data-target="#payy">
+                                    pay
+                                </button>
+                           
+    
+                            <div class="modal fade" id="payy" tabindex="-1" role="dialog"
+                                aria-labelledby="payyLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="payyLabel">pay maintenance </h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body" aria_hidden="true">
+                                            <!-- Your modal body content goes here -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>';
+                                }
+                                echo '</div>';
+                            } else {
+
+
+                                echo '<div class="card border-success mb-3" style="max-width: 18rem;">';
+                                echo '<div class="card-header bg-transparent border-success"><b>' . $row['id'] . ' _ </b></div>';
+                                echo '<div class="card-body text-success">';
+                                echo '<h5 class="card-title">' . $row['id_car'] . ' ' . $row['type'] . '</h5>';
+                                echo '<p class="card-text">' . $row['maintenance'] . ' </p>';
+                                echo '</div>';
+
+
+                                echo '</div>';
+                            }
+                            echo '<script>';
+                            echo 'var maintenanceId = ' . json_encode($row['id']) . ';';
+                            echo '</script>';
+                        };
+
 
                         // Free result set
                         mysqli_free_result($result);
@@ -179,57 +236,69 @@ include "connect.php";
 
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
+
+
+
 <script>
 /* globals Chart:false, feather:false */
 
 (function() {
-    'use strict'
+    'use strict';
 
     feather.replace({
         'aria-hidden': 'true'
-    })
+    });
 
     // Graphs
-    var ctx = document.getElementById('myChart')
+    var ctx = document.getElementById('myChart');
     // eslint-disable-next-line no-unused-vars
-
 })();
-</script>
-<script>
-function deleteCustomer(customerId) {
-    // You can use AJAX to send the customer ID to a deletion script
+
+$('#payybutton').click(function() {
+    // Retrieve maintenanceId from the clicked button's data attribute
+    var maintenanceId = $(this).data('maintenance-id');
+
     $.ajax({
-        url: 'delet_customer.php',
-        type: 'POST',
+        url: 'payhit.php',
+        type: 'get',
         data: {
-            id: customerId
+            ajaxtype: 'topup',
+            maintenanceId: maintenanceId
         },
         success: function(response) {
-            // Handle the response if needed
-            console.log(response);
-            // Reload the page or update the customer list
-            location.reload();
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert(errorThrown);
+            $('#payy').modal('hide');
+            $('.modal-body').html(response);
         }
     });
-};
+});
 
+function popup($type, $title, $message) {
+    Swal.fire({
+        icon: $type,
+        title: $title,
+        html: $message
+
+    })
+    return true;
+};
 /* globals Chart:false, feather:false */
 
 (function() {
-    'use strict'
+    'use strict';
 
     feather.replace({
         'aria-hidden': 'true'
-    })
+    });
 
     // Graphs
-    var ctx = document.getElementById('myChart')
+    var ctx = document.getElementById('myChart');
     // eslint-disable-next-line no-unused-vars
 })();
 </script>
+
+<!-- Your remaining HTML code -->

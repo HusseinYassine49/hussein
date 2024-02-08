@@ -77,19 +77,19 @@ if (isset($_GET['id'])) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 
 <style>
-    .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-    }
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
 
-    @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-            font-size: 3.5rem;
-        }
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
     }
+}
 </style>
 
 
@@ -101,7 +101,9 @@ if (isset($_GET['id'])) {
 
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
         <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Company name</a>
-        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+            aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -123,8 +125,8 @@ if (isset($_GET['id'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="order.php">
-                                <span data-feather="file"></span> Orders
+                            <a class="nav-link" href="addhit.php">
+                                <span data-feather="file"></span> new maintenance
                             </a>
                         </li>
                         <li class="nav-item">
@@ -143,8 +145,8 @@ if (isset($_GET['id'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="layers"></span> Integrations
+                            <a class="nav-link" href="paymaintenance.php">
+                                <span data-feather="layers"></span> paymaintenance
                             </a>
                         </li>
                     </ul>
@@ -188,19 +190,22 @@ if (isset($_GET['id'])) {
                         <div class="form-group col-md-4">
                             <label for="inputEmail4">customer name</label>
                             <div class="form-group">
-                                <input type="text" class="form-control" name="fname" id="inputname" value="<?php echo $fname; ?>" required>
+                                <input type="text" class="form-control" name="fname" id="inputname"
+                                    value="<?php echo $fname; ?>" required>
                             </div>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="inputEmail4">last name</label>
                             <div class="form-group">
-                                <input type="text" class="form-control" id="inputlname" name="lname" value="<?php echo $lname; ?>" required>
+                                <input type="text" class="form-control" id="inputlname" name="lname"
+                                    value="<?php echo $lname; ?>" required>
                             </div>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="inputEmail4">phone number</label>
                             <div class="form-group">
-                                <input type="tel" id="phone" name="phone" class="form-control" id="inputAddress" value="<?php echo $phone; ?>" required>
+                                <input type="tel" id="phone" name="phone" class="form-control" id="inputAddress"
+                                    value="<?php echo $phone; ?>" required>
 
                             </div>
                         </div>
@@ -209,20 +214,23 @@ if (isset($_GET['id'])) {
 
                         <div class="form-group col-md-4">
                             <label for="inputPassword4">email</label>
-                            <input type="email" class="form-control" name="email" id="email" value="<?php echo $email; ?>" required>
+                            <input type="email" class="form-control" name="email" id="email"
+                                value="<?php echo $email; ?>" required>
                         </div>
 
 
                         <div class="form-group col-md-4">
 
                             <label for="inputCity">City</label>
-                            <input type="text" class="form-control" id="inputCity" name="city" value="<?php echo $city; ?>" required>
+                            <input type="text" class="form-control" id="inputCity" name="city"
+                                value="<?php echo $city; ?>" required>
 
                         </div>
 
                         <div class="form-group col-md-4">
                             <label for="inputAddress">Address</label>
-                            <input type="text" class="form-control" id="inputAddress" name="address1" value="<?php echo $address1; ?>  " required>
+                            <input type="text" class="form-control" id="inputAddress" name="address1"
+                                value="<?php echo $address1; ?>  " required>
                         </div>
 
                     </div>
@@ -262,9 +270,11 @@ if (isset($_GET['id'])) {
 </html>
 
 
-<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+    integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
 </script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+    integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous">
 </script>
 
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
@@ -276,72 +286,72 @@ if (isset($_GET['id'])) {
 
 </html>
 <script>
-    function validatePhone(input) {
-        // Remove non-numeric characters
-        input.value = input.value.replace(/\D/g, '');
-    }
+function validatePhone(input) {
+    // Remove non-numeric characters
+    input.value = input.value.replace(/\D/g, '');
+}
 
-    /* globals Chart:false, feather:false */
+/* globals Chart:false, feather:false */
 
-    (function() {
-        'use strict'
+(function() {
+    'use strict'
 
-        feather.replace({
-            'aria-hidden': 'false'
-        })
+    feather.replace({
+        'aria-hidden': 'false'
+    })
 
-        // Graphs
-        var ctx = document.getElementById('myChart')
-        // eslint-disable-next-line no-unused-vars
+    // Graphs
+    var ctx = document.getElementById('myChart')
+    // eslint-disable-next-line no-unused-vars
 
-    })()
+})()
 
 
-    $('#addbrandbutton').click(function() {
+$('#addbrandbutton').click(function() {
 
-        $.ajax({
-            url: 'update_customer.php',
-            type: 'get',
-            data: {
-                ajaxtype: 'topup'
-            },
-            success: function(response) {
-                $('#addBrandModal').modal('hide');
-                $('.modal-body').html(response);
-            }
-        });
+    $.ajax({
+        url: 'update_customer.php',
+        type: 'get',
+        data: {
+            ajaxtype: 'topup'
+        },
+        success: function(response) {
+            $('#addBrandModal').modal('hide');
+            $('.modal-body').html(response);
+        }
     });
-    $('#myForm').on('submit', function(e) {
-        e.preventDefault();
-        console.log($(this).serializeArray());
+});
+$('#myForm').on('submit', function(e) {
+    e.preventDefault();
+    console.log($(this).serializeArray());
 
-        $.ajax({
-            url: 'update_customer.php', // Corrected URL to match form action
-            type: 'POST',
-            data: $(this).serializeArray(),
+    $.ajax({
+        url: 'update_customer.php', // Corrected URL to match form action
+        type: 'POST',
+        data: $(this).serializeArray(),
 
-            success: function(data) {
-                console.log(data); // Log the response for debugging
-                if (data) {
-                    popup("success");
-                } else {
-                    popup("error", "Error: " + data, "Error while updating, double check the fields!");
-                }
-            },
-            error: function(jXHR, textStatus, errorThrown) {
-                alert(errorThrown);
+        success: function(data) {
+            console.log(data); // Log the response for debugging
+            if (data) {
+                popup("success");
+            } else {
+                popup("error", "Error: " + data, "Error while updating, double check the fields!");
             }
-        });
+        },
+        error: function(jXHR, textStatus, errorThrown) {
+            alert(errorThrown);
+        }
     });
+});
 
 
-    function popup($type, $title, $message) {
-        Swal.fire({
-            type: $type,
-            title: $title,
-            html: $message
+function popup($type, $title, $message) {
+    Swal.fire({
+        type: $type,
+        title: $title,
+        html: $message
 
-        })
-        return true;
-    };
+    })
+    return true;
+};
 </script>

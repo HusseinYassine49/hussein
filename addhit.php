@@ -1,3 +1,6 @@
+<?php
+include "connect.php";
+?>
 <!doctype html>
 <html lang="en">
 
@@ -7,11 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.84.0">
-    <title>Dashboard Template · Bootstrap v5.0</title>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.8.2/css/lightbox.min.css">
+    <title>Customers</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
 
@@ -54,99 +53,6 @@
             font-size: 3.5rem;
         }
     }
-
-    .b-example-divider {
-        height: 3rem;
-        background-color: rgba(0, 0, 0, .1);
-        border: solid rgba(0, 0, 0, .15);
-        border-width: 1px 0;
-        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-    }
-
-    .b-example-vr {
-        flex-shrink: 0;
-        width: 1.5rem;
-        height: 100vh;
-    }
-
-    .bi {
-        vertical-align: -.125em;
-        fill: currentColor;
-    }
-
-    .nav-scroller {
-        position: relative;
-        z-index: 2;
-        height: 2.75rem;
-        overflow-y: hidden;
-    }
-
-    .nav-scroller .nav {
-        display: flex;
-        flex-wrap: nowrap;
-        padding-bottom: 1rem;
-        margin-top: -1px;
-        overflow-x: auto;
-        text-align: center;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-    }
-
-    @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-            font-size: 3.5rem;
-        }
-    }
-
-    .photo-gallery {
-        color: #313437;
-        background-color: #fff;
-    }
-
-    .photo-gallery p {
-        color: #7d8285;
-    }
-
-    .photo-gallery h2 {
-        font-weight: bold;
-        margin-bottom: 40px;
-        padding-top: 40px;
-        color: inherit;
-    }
-
-    @media (max-width:767px) {
-        .photo-gallery h2 {
-            margin-bottom: 25px;
-            padding-top: 25px;
-            font-size: 24px;
-        }
-    }
-
-    .photo-gallery .intro {
-        font-size: 16px;
-        max-width: 500px;
-        margin: 0 auto 40px;
-    }
-
-    .photo-gallery .intro p {
-        margin-bottom: 0;
-    }
-
-    .photo-gallery .photos {
-        padding-bottom: 20px;
-    }
-
-    .photo-gallery .item {
-        padding-bottom: 30px;
-    }
     </style>
 
 
@@ -163,6 +69,7 @@
             aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
 
         <div class="navbar-nav">
             <div class="nav-item text-nowrap">
@@ -181,7 +88,6 @@
                                 <span data-feather="home"></span> Dashboard
                             </a>
                         </li>
-                        <li class="nav-item">
                         <li class="nav-item">
                             <a class="nav-link" href="addhit.php">
                                 <span data-feather="file"></span> new maintenance
@@ -211,63 +117,82 @@
 
                 </div>
             </nav>
+            <form id="myForm" method="post" enctype="multipart/form-data" novalidate  >
+                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Username</label>
+                            <div class="form-group">
 
-
-
-
-
-            <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-                <!-- Include your header content from the original gallery page -->
-            </header>
-
-            <div class="container-fluid">
-                <div class="row">
-                    <!-- You can include the sidebar and main content structure from the original gallery page if needed -->
-
-                    <!-- Modify this section to display images related to the selected car -->
-                    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                        <div class="photo-gallery">
-                            <div class="container">
-
-                                <div class="row photos">
+                                <select class="form-control" id="user" name="username">
                                     <?php
-                                    include "connect.php";
-                                    global $conn;
+                                    // Fetch usernames from the database and populate the dropdown
+                                    $query = "SELECT username FROM user";
+                                    $result = mysqli_query($conn, $query);
 
-                                    // Get car ID from the URL
-                                    $car_id = isset($_GET['id']) ? $_GET['id'] : 0;
-
-                                    // Fetch photos for the selected car
-                                    $queryphoto = "SELECT `photo` FROM `image` WHERE  `id_car`={$car_id}";
-                                    $resultphoto = mysqli_query($conn, $queryphoto);
-
-                                    while ($photo_row = mysqli_fetch_assoc($resultphoto)) {
-                                        echo '<div class="col-sm-6 col-md-4 col-lg-3 item">';
-                                        echo '<a href="' . $photo_row['photo'] . '" data-lightbox="photos">';
-                                        echo '<img class="img-fluid" src="' . $photo_row['photo'] . '">';
-                                        echo '</a>';
-                                        echo '</div>';
+                                    if ($result && mysqli_num_rows($result) > 0) {
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<option value='" . $row['username'] . "'>" . $row['username'] . "</option>";
+                                        }
                                     }
                                     ?>
-                                </div>
+
+                                </select>
                             </div>
                         </div>
-                    </main>
+                        <div class="form-group col-md-6">
+                            <label for="inputPassword4">Password</label>
+                            <input type="password" class="form-control" id="inputPassword4" name="password" required>
+                            <div class="invalid-tooltip">
+                                Please choose a unique and valid username.
+                            </div>
+                        </div>
+                    </div>
 
-                </div>
-            </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="selc">Car id</label>
+                            <div class="form-group">
+                                <select class="form-control" id="id" name="id" method="get">
+                                    <option value="select"></option>
+                                    <?php
+                                    // Fetch usernames from the database and populate the dropdown
+                                    $query = "SELECT id FROM car";
+                                    $result = mysqli_query($conn, $query);
+
+                                    if ($result && mysqli_num_rows($result) > 0) {
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<option value='" . $row['id'] . "'>" . $row['id'] . "</option>";
+                                        }
+                                    }
+                                    ?>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="sell">Car name</label>
+                            <div class="form-group">
+                                <select class="form-control" id="fname" name="fname">
+                                    <!-- Last names will be dynamically populated based on the selected first name -->
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-lg-4">
+                            <label for="sell">details for maintenance </label>
+                            <div class="form-group">
+                                <input class="form-control" name="maintenance" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit order</button>
 
 
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js">
-            </script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.8.2/js/lightbox.min.js"></script>
-            </main>
-
-
-
-
-
+                </main>
+            </form>
 
 
 
@@ -284,9 +209,12 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
         integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous">
     </script>
-    <script src="dashboard.js"></script>
+
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
@@ -304,5 +232,72 @@
     var ctx = document.getElementById('myChart')
     // eslint-disable-next-line no-unused-vars
 
-})()
+})();
+</script>
+<script>
+$(document).ready(function() {
+    $('select[name="id"]').change(function() {
+        // Get the selected first name
+        var selectedId = $(this).val();
+
+        // Make an AJAX request to get_first_names.php
+        $.ajax({
+            type: 'GET',
+            url: 'get_carr.php',
+            data: {
+                id: selectedId,
+            },
+            success: function(data) {
+                // Update the last name dropdown with the fetched options
+                $('#fname').html(data);
+            },
+            error: function() {
+                console.error('Error fetching last names.');
+            }
+        });
+    });
+});
+
+(function() {
+    'use strict'
+
+    feather.replace({
+        'aria-hidden': 'true'
+    })
+
+    // Graphs
+    var ctx = document.getElementById('myChart')
+    // eslint-disable-next-line no-unused-vars
+
+})();
+
+$('#myForm').on('submit', function(e) {
+    e.preventDefault();
+
+    $.ajax({
+        url: 'addmaintenance.php',
+        type: 'POST',
+        data: $(this).serialize(), // Use serialize to serialize the form data
+
+        success: function(data) {
+            console.log(data); // Log the response for debugging
+            // You can add additional logic here based on the server response
+            popup('success', 'Success', 'Maintenance added successfully');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error(textStatus, errorThrown); // Log the error for debugging
+            popup('error', 'Error', 'Failed to add maintenance');
+        }
+    });
+});
+
+function popup($type, $title, $message) {
+    Swal.fire({
+        type: $type,
+        title: $title,
+        html: $message
+
+    })
+    return true;
+};
 </script>
