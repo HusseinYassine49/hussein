@@ -53,6 +53,52 @@ $roleFromURL = isset($_GET['role']) ? $_GET['role'] : '';
     <!-- <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 
     <style>
+    .btn-green {
+        margin-block: 10px;
+        background-color: #28a745;
+        /* Green color */
+        border-color: #28a745;
+        /* Green color for border */
+        color: #fff;
+        /* White text color */
+        box-shadow: 0 4px 6px rgba(40, 167, 69, 0.1);
+        /* Add shadow */
+        padding: 8px 12px;
+        /* Adjust padding for smaller size */
+        font-size: 14px;
+        /* Adjust font size if needed */
+    }
+
+    /* Rest of your existing styles */
+    .btn-green:hover {
+        margin-block: 10px;
+        background-color: #218838;
+        /* Darker green on hover */
+        border-color: #218838;
+        /* Darker green for border on hover */
+    }
+
+    .card-header {
+        background-color: #343A40;
+        /* Use the background color of your navbar */
+        color: black;
+        /* Change the text color if needed */
+    }
+
+    .card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease-in-out;
+        margin-bottom: 10px;
+        /* Adjust the bottom margin as needed */
+        margin-right: 10px;
+        /* Add margin between cards */
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Rest of your existing styles */
     .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
@@ -65,6 +111,20 @@ $roleFromURL = isset($_GET['role']) ? $_GET['role'] : '';
         .bd-placeholder-img-lg {
             font-size: 3.5rem;
         }
+    }
+
+    .main-content-card {
+        margin-right: 30px;
+        /* Add margin between cards in the main content area */
+    }
+
+    .flex-column {
+        /* background-color: #B2F0E8; */
+        height: 100%;
+    }
+
+    .position-sticky {
+        height: 100%;
     }
     </style>
 
@@ -130,6 +190,19 @@ $roleFromURL = isset($_GET['role']) ? $_GET['role'] : '';
                                 <span data-feather="layers"></span> paymaintenance
                             </a>
                         </li>
+                        <?php
+                        // Check user role for permission control
+                        $isAdmin = ($_SESSION['role'] === 'admin');
+
+                        // Check if the role is passed as a GET parameter
+                        $roleFromURL = isset($_GET['role']) ? $_GET['role'] : '';
+                        if ($isAdmin) {
+                            echo ' <li class="nav-item">
+                        <a class="nav-link" href="actionuser.php">
+                            <span data-feather="users"></span> action user 
+                        </a>
+                    </li>';
+                        } ?>
                     </ul>
 
                 </div>
@@ -158,14 +231,14 @@ $roleFromURL = isset($_GET['role']) ? $_GET['role'] : '';
 
                             // Check payment status and add to appropriate array
                             if ($row['type'] == 'notpaid' || $row['type'] == 'notpayd') {
-                                echo '<div class="card border-danger mb-3" style="max-width: 18rem;">';
+                                echo '<div class="card mb-3 border-danger main-content-card" style="max-width: 18rem;">';
                                 echo '<div class="card-header bg-transparent border-danger"><b>' . $row['id'] . ' _ </b></div>';
                                 echo '<div class="card-body text-danger">';
                                 echo '<h5 class="card-title">' . $row['id_car'] . ' ' . $row['type'] . '</h5>';
                                 echo '<p class="card-text">' . $irow['Hit'] . ' </p>';
                                 echo '</div>';
                                 if ($isAdmin) {
-                                    echo '<button type="button" class="btn btn-primary" data-toggle="modal" id="payybutton" data-maintenance-id="' . $row['id'] . '"
+                                    echo '<button type="button" class="btn btn-green" data-toggle="modal" id="payybutton" data-maintenance-id="' . $row['id'] . '"
                                     data-target="#payy">
                                     pay
                                 </button>
@@ -192,11 +265,11 @@ $roleFromURL = isset($_GET['role']) ? $_GET['role'] : '';
                             } else {
 
 
-                                echo '<div class="card border-success mb-3" style="max-width: 18rem;">';
-                                echo '<div class="card-header bg-transparent border-success"><b>' . $row['id'] . ' _ </b></div>';
+                                echo '<div class="card mb-3 border-success main-content-card" style="max-width: 18rem;">';
+                                echo '<div class="card-header bg-transparent border-success text_white"><b>' . $row['id'] . ' _ </b></div>';
                                 echo '<div class="card-body text-success">';
-                                echo '<h5 class="card-title">' . $row['id_car'] . ' ' . $row['type'] . '</h5>';
-                                echo '<p class="card-text">' . $row['maintenance'] . ' </p>';
+                                echo '<h5 class="card-title text_primary">' . $row['id_car'] . ' ' . $row['type'] . '</h5>';
+                                echo '<p class="card-text text_primary">' . $row['maintenance'] . ' </p>';
                                 echo '</div>';
 
 
@@ -258,6 +331,8 @@ $roleFromURL = isset($_GET['role']) ? $_GET['role'] : '';
     var ctx = document.getElementById('myChart');
     // eslint-disable-next-line no-unused-vars
 })();
+
+
 
 $('#payybutton').click(function() {
     // Retrieve maintenanceId from the clicked button's data attribute

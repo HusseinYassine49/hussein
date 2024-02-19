@@ -67,7 +67,7 @@ function insertPhotoPaths($carId, $photoPaths, $type)
 };
 
 
-function addcustom($fname, $lname, $phone, $email, $address1, $city, $username, $password, $Time)
+function addcustom($fname, $lname, $phone, $email, $address1, $city, $username, $password)
 {
     global $conn;
     if (password($username, $password) == true) {
@@ -77,6 +77,7 @@ function addcustom($fname, $lname, $phone, $email, $address1, $city, $username, 
         $result = mysqli_query($conn, $query);
         if ($result) {
             $carId = mysqli_insert_id($conn);
+            $Time = date("Y-m-d");
             $logQuery = "INSERT INTO `log_entry`(`carId`,`username`, `action`, `Time`)
              VALUES ('$carId','$username','add customer','$Time')";
             $logResult = mysqli_query($conn, $logQuery);
@@ -132,21 +133,23 @@ function deletcustomer($fname, $lname, $phone, $email, $address1, $city, $userna
         }
     }
 };
-function addorder($username, $password, $fname, $lname, $dateS, $dateE, $carid, $price, $pay)
+function addorder($username, $password, $fname, $id, $dateS, $dateE, $carid, $price, $pay)
 {
     global $conn;
     if (password($username, $password) == true) {
-
-        $query = " INSERT INTO `rental`(  `username`, `fname`, `lname`, `idcar`, `start`, `end`, `price`, `pay`) 
-        VALUES ('$username','$fname','$lname','$carid','$dateS','$dateE','$price','$pay')";
+        $rest = $price - $pay;
+        $query = " INSERT INTO `rental`(  `username`, `id_customer`, `fname`, `idcar`, `start_date`, `end_date`, `price`, `pay`,`rest`) 
+        VALUES ('$username','$id','$fname','$carid','$dateS','$dateE','$price','$pay', '$rest')";
         $result = mysqli_query($conn, $query);
         if ($result) {
             $carId = mysqli_insert_id($conn);
-            $Time = date("Y-m-d H:i:s");
+            $Time = date("Y-m-d");
             $logQuery = "INSERT INTO `log_entry`(`carId`,`username`, `action`, `Time`)
-             VALUES ('$carId','$username','add order for $fname $lname ','$Time')";
+             VALUES ('$carId','$username','add order for $id $fname ','$Time')";
             $logResult = mysqli_query($conn, $logQuery);
 
+            $payQuery = "INSERT INTO `payment`(`idcustomer`, `price`,`pay`, `rest`) VALUES ('$id','$price','$pay','$rest')";
+            $payRuslet = mysqli_query($conn, $payQuery);
             if ($logResult) {
                 echo true; // Success
             } else {
@@ -171,7 +174,7 @@ function addmaintenance($username, $password, $carid, $Model, $maintenance)
                 $editQuery = "UPDATE `car` SET `Hit`='$maintenance' WHERE id='$carid'";
                 $editresult = mysqli_query($conn, $editQuery);
 
-                $Time = date("Y-m-d H:i:s");
+                $Time = date("Y-m-d");
                 $logQuery = "INSERT INTO `log_entry`(`carId`,`username`, `action`, `Time`)
             VALUES ('$carid','$username','add hit for $Model id:$carid','$Time')";
                 $logResult = mysqli_query($conn, $logQuery);

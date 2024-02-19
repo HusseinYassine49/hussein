@@ -1,6 +1,6 @@
 <?php
 include "connect.php";
-
+session_start();
 ?>
 <!doctype html>
 <html lang="en">
@@ -109,6 +109,20 @@ include "connect.php";
                                 <span data-feather="layers"></span> paymaintenance
                             </a>
                         </li>
+                        <?php
+                      
+                        // Check user role for permission control
+                        $isAdmin = ($_SESSION['role'] === 'admin');
+
+                        // Check if the role is passed as a GET parameter
+                        $roleFromURL = isset($_GET['role']) ? $_GET['role'] : '';
+                        if ($isAdmin) {
+                            echo ' <li class="nav-item">
+                        <a class="nav-link" href="actionuser.php">
+                            <span data-feather="users"></span> action user 
+                        </a>
+                    </li>';
+                        } ?>
                     </ul>
 
                 </div>

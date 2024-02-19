@@ -1,5 +1,10 @@
 <?php
 include "connect.php";
+session_start();
+$customer_id = isset($_GET['id_customer']) ? $_GET['id_customer'] : 0;
+$rest = isset($_GET['rest']) ? $_GET['rest'] : 0;
+$id = isset($_GET['id']) ? $_GET['id'] : 0;
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -53,6 +58,89 @@ include "connect.php";
             font-size: 3.5rem;
         }
     }
+
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+        }
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f8f9fa;
+    }
+
+    /* Header Styles */
+    .navbar {
+        background-color: #343a40;
+    }
+
+    .navbar-brand {
+        color: #ffffff;
+    }
+
+    .navbar-brand:hover {
+        color: #ffffff;
+    }
+
+    .nav-link {
+        color: #ffffff;
+    }
+
+    /* Form Styles */
+    .container-fluid {
+        margin-top: 20px;
+    }
+
+    .form-row {
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    /* Button Styles */
+    .btn-primary {
+        background-color: #007bff;
+        color: #ffffff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        color: #ffffff;
+    }
+
+    /* Input Styles */
+    .form-control {
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* File Input Styles */
+    .input-file {
+        display: block;
+        margin-top: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .flex-column {
+        /* background-color: #B2F0E8; */
+        height: 100%;
+    }
+
+    .position-sticky {
+        height: 100%;
+    }
     </style>
 
 
@@ -94,7 +182,7 @@ include "connect.php";
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="prodect.php">
-                                <span data-feather="shopping-cart"></span> Products
+                                <span data-feather="shopping-cart"></span> add carr
                             </a>
                         </li>
                         <li class="nav-item">
@@ -112,6 +200,19 @@ include "connect.php";
                                 <span data-feather="layers"></span> paymaintenance
                             </a>
                         </li>
+                        <?php
+                        // Check user role for permission control
+                        $isAdmin = ($_SESSION['role'] === 'admin');
+
+                        // Check if the role is passed as a GET parameter
+                        $roleFromURL = isset($_GET['role']) ? $_GET['role'] : '';
+                        if ($isAdmin) {
+                            echo ' <li class="nav-item">
+                        <a class="nav-link" href="actionuser.php">
+                            <span data-feather="users"></span> action user 
+                        </a>
+                    </li>';
+                        } ?>
                     </ul>
 
 
@@ -154,14 +255,20 @@ include "connect.php";
                     <div class="form-group col-md-6">
                         <label for="selc">Customer id</label>
                         <div class="form-group">
-                            <select class="form-control" id="id" name="id" method="get">
+                            <select class="form-control" id="id" name="customer_id" method="get">
                                 <?php
+                                if ($customer_id != 0) {
+                                    echo '<option value=' . $customer_id . '>' . $customer_id . ' </option>';
+                                };
+
                                 // Fetch usernames from the database and populate the dropdown
                                 $query = "SELECT id FROM customer";
                                 $result = mysqli_query($conn, $query);
 
                                 if ($result && mysqli_num_rows($result) > 0) {
+
                                     while ($row = mysqli_fetch_assoc($result)) {
+
                                         echo "<option value='" . $row['id'] . "'>" . $row['id'] . "</option>";
                                     }
                                 }
@@ -182,18 +289,82 @@ include "connect.php";
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-4">
-                        <label for="car">pay</label>
-                        <input type="number" class="form-control" id="car" required>
+                        <label for="pay">pay</label>
+                        <input type="number" class="form-control" id="pay" required>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="price">Price</label>
-                        <input type="number" class="form-control" id="price" required>
+                        <label for="price">rest</label>
+                        <?php
+                        if ($rest != 0) {
+                            echo '<input type="number" class="form-control" id="rest" required value=' . $rest . '>';
+                        } else {
+                            echo '<input type="number" class="form-control" id="rest" required>';
+                        }
+
+                        ?>
+
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Submit order</button>
+                <button type="submit" class="btn btn-primary">Submit pay</button>
+                <br>
+                <h2>Customer rentel</h2>
+                <form class="d-flex" method="GET" action="pay.php">
+                    <input class="form-control me-2" type="search" placeholder="name or date" aria-label="Search"
+                        name="search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
 
+                        <thead>
+                            <tr>
+                                <th scope="col">id</th>
+                                <th scope="col">id customer</th>
+                                <th scope="col">name</th>
+                                <th scope="col">idcar </th>
+                                <th scope="col">end_date</th>
+                                <th scope="col">rest</th>
+                                <th scope="col">insert</th>
 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            include "connect.php";
+                            if (isset($_GET['search']) && $_GET['search'] != '') {
+                                $searchQuery = $_GET['search'];
+                                $query = "SELECT * FROM rental WHERE fname LIKE  '$searchQuery' OR end_date LIKE '$searchQuery'  ORDER BY `rest` ASC";
+                            } else {
+
+                                $query = "SELECT * FROM rental ORDER BY `rest` ASC"; // Replace 'your_table_name' with your actual table name
+                            }
+                            $result = mysqli_query($conn, $query);
+
+                            if ($result && mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    if ($row['rest'] > 0) {
+                                        echo "<tr>";
+                                        echo "<td>" . $row['id'] . "</td>";
+                                        echo "<td>" . $row['id_customer'] . "</td>";
+                                        echo "<td>" . $row['fname'] . "</td>";
+                                        echo "<td>" . $row['idcar'] . "</td>";
+                                        echo "<td>" . $row['end_date'] . "</td>";
+                                        echo "<td>" . $row['rest'] . "</td>";
+                                        echo '<td> <button id="insert" type="button" ><a href="pay.php?id_customer=' . $row['id_customer'] . '&rest=' . $row['rest'] . '&id=' . $row['id'] . '" class="btn btn-sm btn-outline">insert</a></button></td>';
+
+                                        echo "</tr>";
+                                    } else {
+                                    }
+                                }
+                            } else {
+                                echo "<tr><td colspan='5'>No data found</td></tr>"; // Adjust colspan based on the number of columns
+                            }
+                            ?>
+
+                        </tbody>
+                    </table>
+                </div>
             </main>
 
 
@@ -215,6 +386,8 @@ include "connect.php";
 
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
@@ -222,8 +395,32 @@ include "connect.php";
 /* globals Chart:false, feather:false */
 
 $(document).ready(function() {
-    $('select[name="id"]').change(function() {
-        // Get the selected first name
+
+    $('select[name="customer_id"]').change(function() {
+
+        // Get the selected first name 
+        var selectedId = $(this).val();
+
+        // Make an AJAX request to get_first_names.php
+        $.ajax({
+            type: 'GET',
+            url: 'get_firs_names.php',
+            data: {
+                id: selectedId,
+            },
+            success: function(data) {
+                // Update the last name dropdown with the fetched options
+                $('#fname').html(data);
+            },
+            error: function() {
+                console.error('Error fetching last names.');
+            }
+        });
+    });
+
+
+    $('#insert').click(function() {
+        // Get the selected first name 
         var selectedId = $(this).val();
 
         // Make an AJAX request to get_first_names.php
@@ -282,4 +479,37 @@ $(document).ready(function() {
         });
     });
 });
+
+$('#myForm').on('submit', function(e) {
+    e.preventDefault();
+    console.log($(this).serializeArray());
+
+    $.ajax({
+        url: 'editpay.php', // Corrected URL to match form action
+        type: 'POST',
+        data: $(this).serializeArray(),
+
+        success: function(data) {
+            console.log(data); // Log the response for debugging
+            if (data) {
+                popup("success");
+            } else {
+                popup("error", "Error: " + data, "Error while updating, double check the fields!");
+            }
+        },
+        error: function(jXHR, textStatus, errorThrown) {
+            alert(errorThrown);
+        }
+    });
+});
+
+function popup($type, $title, $message) {
+    Swal.fire({
+        type: $type,
+        title: $title,
+        html: $message
+
+    })
+    return true;
+};
 </script>

@@ -66,6 +66,15 @@ $roleFromURL = isset($_GET['role']) ? $_GET['role'] : '';
             font-size: 3.5rem;
         }
     }
+
+    .flex-column {
+        /* background-color: #B2F0E8; */
+        height: 100%;
+    }
+
+    .position-sticky {
+        height: 100%;
+    }
     </style>
 
 
@@ -212,29 +221,48 @@ $roleFromURL = isset($_GET['role']) ? $_GET['role'] : '';
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
 <script>
 /* globals Chart:false, feather:false */
 function deletecarr(customerId) {
-    // You can use AJAX to send the customer ID to a deletion script
-    $.ajax({
-        url: 'deletcarr.php',
-        type: 'POST',
-        data: {
-            id: customerId
-        },
-        success: function(response) {
-            // Handle the response if needed
-            console.log(response);
-            // Reload the page or update the customer list
-            location.reload();
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert(errorThrown);
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to delete this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success"
+            });
+            $.ajax({
+                url: 'deletcarr.php',
+                type: 'POST',
+                data: {
+                    id: customerId
+                },
+                success: function(response) {
+                    // Handle the response if needed
+                    console.log(response);
+                    // Reload the page or update the customer list
+                    location.reload();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            });
         }
     });
+    // You can use AJAX to send the customer ID to a deletion script
+
 };
 (function() {
     'use strict'

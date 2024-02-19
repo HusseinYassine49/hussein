@@ -1,5 +1,6 @@
 <?php
 include "connect.php";
+session_start();
 ?>
 <!doctype html>
 <html lang="en">
@@ -52,6 +53,66 @@ include "connect.php";
         .bd-placeholder-img-lg {
             font-size: 3.5rem;
         }
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f8f9fa;
+    }
+
+    /* Header Styles */
+    .navbar {
+        background-color: #343a40;
+    }
+
+    .navbar-brand {
+        color: #ffffff;
+    }
+
+    .navbar-brand:hover {
+        color: #ffffff;
+    }
+
+    .nav-link {
+        color: #ffffff;
+    }
+
+    /* Form Styles */
+    .container-fluid {
+        margin-top: 20px;
+    }
+
+    .form-row {
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    /* Button Styles */
+    .btn-primary {
+        background-color: #007bff;
+        color: #ffffff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        color: #ffffff;
+    }
+
+    /* Input Styles */
+    .form-control {
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* File Input Styles */
+    .input-file {
+        display: block;
+        margin-top: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
     </style>
 
@@ -113,6 +174,19 @@ include "connect.php";
                                 <span data-feather="layers"></span> paymaintenance
                             </a>
                         </li>
+                        <?php
+                        // Check user role for permission control
+                        $isAdmin = ($_SESSION['role'] === 'admin');
+
+                        // Check if the role is passed as a GET parameter
+                        $roleFromURL = isset($_GET['role']) ? $_GET['role'] : '';
+                        if ($isAdmin) {
+                            echo ' <li class="nav-item">
+                        <a class="nav-link" href="actionuser.php">
+                            <span data-feather="users"></span> action user 
+                        </a>
+                    </li>';
+                        } ?>
                     </ul>
 
                 </div>

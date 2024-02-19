@@ -1,5 +1,6 @@
 <?php
 include "connect.php";
+session_start();
 ?>
 <!doctype html>
 <html lang="en">
@@ -38,7 +39,7 @@ include "connect.php";
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
     <!-- Bootstrap core CSS -->
     <!-- <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet"> -->
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
     .bd-placeholder-img {
         font-size: 1.125rem;
@@ -52,6 +53,19 @@ include "connect.php";
         .bd-placeholder-img-lg {
             font-size: 3.5rem;
         }
+    }
+
+    .flex-column {
+        /* background-color: #while; */
+        height: 100%;
+    }
+
+    .position-sticky {
+        height: 100%;
+    }
+
+    body {
+        font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
     </style>
 
@@ -117,6 +131,20 @@ include "connect.php";
                                 <span data-feather="layers"></span> paymaintenance
                             </a>
                         </li>
+                        <?php
+
+                        // Check user role for permission control
+                        $isAdmin = ($_SESSION['role'] === 'admin');
+
+                        // Check if the role is passed as a GET parameter
+                        $roleFromURL = isset($_GET['role']) ? $_GET['role'] : '';
+                        if ($isAdmin) {
+                            echo ' <li class="nav-item">
+                        <a class="nav-link" href="actionuser.php">
+                            <span data-feather="users"></span> action user 
+                        </a>
+                    </li>';
+                        } ?>
                     </ul>
 
                 </div>
@@ -139,24 +167,34 @@ include "connect.php";
                     if ($result) {
                         // Fetch data and display cards
                         while ($row = mysqli_fetch_assoc($result)) {
-                            echo '<div class="card border-success mb-3" style="max-width: 18rem;">';
-                            echo '<div class="card-header bg-transparent border-success"><b>' . $row['id'] . ' _ </b><a href="view.php"><button>payment</button></a></div>';
-                            echo '<div class="card-body text-success">';
+                            echo '<div class="col-md-4 mb-4">';
+                            echo '<div class="card">';
+                            echo '<div class="card-header bg-success text-white">';
+                            echo '<b>' . $row['id'] . ' - <a href="view.php?id=' . $row['id'] . '"><button class="btn btn-sm btn-light shadow-sm">Payment</button></a></b>';
+                            echo '</div>';
+                            echo '<div class="card-body">';
                             echo '<h5 class="card-title">' . $row['fname'] . ' ' . $row['lname'] . '</h5>';
                             echo '<p class="card-text">' . $row['address1'] . ', ' . $row['city'] . '<br>Phone: ' . $row['phone'] . '</p>';
                             echo '</div>';
-
-                            echo '<button type="button" class="btn btn-sm btn-outline-secondary"><a href="edit.php?id=' . $row['id'] . '" class="btn btn-sm btn-outline-secondary">Edit</a></button>';
-                            echo '<button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteCustomer(' . $row['id'] . ')">Delete</button>';
+                            echo '<div class="card-footer">';
+                            echo '<a href="edit.php?id=' . $row['id'] . '" class="btn btn-sm btn-outline-secondary shadow-sm">Edit</a>';
+                            if ($isAdmin) {
+                                echo '<button class="btn btn-sm btn-outline-danger shadow-sm" onclick="deleteCustomer(' . $row['id'] . ')">Delete</button>';
+                            }
+                            echo '</div>';
+                            echo '</div>';
                             echo '</div>';
                         }
-
-                        // Free result set
                         mysqli_free_result($result);
                     } else {
                         echo "Error: " . mysqli_error($conn);
                     }
                     ?>
+
+                </div>
+
+                <!-- Add some space between cards and the chart -->
+
 
             </main>
 
@@ -200,26 +238,41 @@ include "connect.php";
 </script>
 <script>
 function deleteCustomer(customerId) {
-    // You can use AJAX to send the customer ID to a deletion script
-    $.ajax({
-        url: 'delet_customer.php',
-        type: 'POST',
-        data: {
-            id: customerId
-        },
-        success: function(response) {
-            // Handle the response if needed
-            console.log(response);
-            // Reload the page or update the customer list
-            location.reload();
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert(errorThrown);
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to delete this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success"
+            });
+            $.ajax({
+                url: 'delet_customer.php',
+                type: 'POST',
+                data: {
+                    id: customerId
+                },
+                success: function(response) {
+                    // Handle the response if needed
+                    console.log(response);
+                    // Reload the page or update the customer list
+                    location.reload();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            });
+
         }
     });
 };
-
-/* globals Chart:false, feather:false */
 
 (function() {
     'use strict'

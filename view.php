@@ -1,3 +1,6 @@
+<?php
+include "connect.php";
+session_start(); ?>
 <!doctype html>
 <html lang="en">
 
@@ -41,112 +44,112 @@
     <!-- <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 
     <style>
-    .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-    }
-
-    @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-            font-size: 3.5rem;
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
         }
-    }
 
-    .b-example-divider {
-        height: 3rem;
-        background-color: rgba(0, 0, 0, .1);
-        border: solid rgba(0, 0, 0, .15);
-        border-width: 1px 0;
-        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-    }
-
-    .b-example-vr {
-        flex-shrink: 0;
-        width: 1.5rem;
-        height: 100vh;
-    }
-
-    .bi {
-        vertical-align: -.125em;
-        fill: currentColor;
-    }
-
-    .nav-scroller {
-        position: relative;
-        z-index: 2;
-        height: 2.75rem;
-        overflow-y: hidden;
-    }
-
-    .nav-scroller .nav {
-        display: flex;
-        flex-wrap: nowrap;
-        padding-bottom: 1rem;
-        margin-top: -1px;
-        overflow-x: auto;
-        text-align: center;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-    }
-
-    @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-            font-size: 3.5rem;
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
         }
-    }
 
-    .photo-gallery {
-        color: #313437;
-        background-color: #fff;
-    }
+        .b-example-divider {
+            height: 3rem;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+        }
 
-    .photo-gallery p {
-        color: #7d8285;
-    }
+        .b-example-vr {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+        }
 
-    .photo-gallery h2 {
-        font-weight: bold;
-        margin-bottom: 40px;
-        padding-top: 40px;
-        color: inherit;
-    }
+        .bi {
+            vertical-align: -.125em;
+            fill: currentColor;
+        }
 
-    @media (max-width:767px) {
+        .nav-scroller {
+            position: relative;
+            z-index: 2;
+            height: 2.75rem;
+            overflow-y: hidden;
+        }
+
+        .nav-scroller .nav {
+            display: flex;
+            flex-wrap: nowrap;
+            padding-bottom: 1rem;
+            margin-top: -1px;
+            overflow-x: auto;
+            text-align: center;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+
+        .photo-gallery {
+            color: #313437;
+            background-color: #fff;
+        }
+
+        .photo-gallery p {
+            color: #7d8285;
+        }
+
         .photo-gallery h2 {
-            margin-bottom: 25px;
-            padding-top: 25px;
-            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            padding-top: 40px;
+            color: inherit;
         }
-    }
 
-    .photo-gallery .intro {
-        font-size: 16px;
-        max-width: 500px;
-        margin: 0 auto 40px;
-    }
+        @media (max-width:767px) {
+            .photo-gallery h2 {
+                margin-bottom: 25px;
+                padding-top: 25px;
+                font-size: 24px;
+            }
+        }
 
-    .photo-gallery .intro p {
-        margin-bottom: 0;
-    }
+        .photo-gallery .intro {
+            font-size: 16px;
+            max-width: 500px;
+            margin: 0 auto 40px;
+        }
 
-    .photo-gallery .photos {
-        padding-bottom: 20px;
-    }
+        .photo-gallery .intro p {
+            margin-bottom: 0;
+        }
 
-    .photo-gallery .item {
-        padding-bottom: 30px;
-    }
+        .photo-gallery .photos {
+            padding-bottom: 20px;
+        }
+
+        .photo-gallery .item {
+            padding-bottom: 30px;
+        }
     </style>
 
 
@@ -158,9 +161,7 @@
 
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
         <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">Company name</a>
-        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
-            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
-            aria-label="Toggle navigation">
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -207,6 +208,19 @@
                                 <span data-feather="layers"></span> paymaintenance
                             </a>
                         </li>
+                        <?php
+                        // Check user role for permission control
+                        $isAdmin = ($_SESSION['role'] === 'admin');
+
+                        // Check if the role is passed as a GET parameter
+                        $roleFromURL = isset($_GET['role']) ? $_GET['role'] : '';
+                        if ($isAdmin) {
+                            echo ' <li class="nav-item">
+                        <a class="nav-link" href="actionuser.php">
+                            <span data-feather="users"></span> action user 
+                        </a>
+                    </li>';
+                        } ?>
                     </ul>
 
                 </div>
@@ -278,11 +292,9 @@
 
     <!-- <script src="../assets/dist/js/bootstrap.bundle.min.js"></script> -->
 
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
-        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
-        integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous">
     </script>
     <script src="dashboard.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
@@ -291,18 +303,18 @@
 
 </html>
 <script>
-/* globals Chart:false, feather:false */
+    /* globals Chart:false, feather:false */
 
-(function() {
-    'use strict'
+    (function() {
+        'use strict'
 
-    feather.replace({
-        'aria-hidden': 'true'
-    })
+        feather.replace({
+            'aria-hidden': 'true'
+        })
 
-    // Graphs
-    var ctx = document.getElementById('myChart')
-    // eslint-disable-next-line no-unused-vars
+        // Graphs
+        var ctx = document.getElementById('myChart')
+        // eslint-disable-next-line no-unused-vars
 
-})()
+    })()
 </script>
