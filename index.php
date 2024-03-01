@@ -1,7 +1,7 @@
 <?php
 
-require_once 'connect.php';
-include 'login.php';
+require_once 'includes/connect.php';
+include 'includes/login.php';
 
 ?>
 
@@ -14,7 +14,8 @@ include 'login.php';
     <title>Login Page</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="your-updated-integrity-value" crossorigin="anonymous"></script> -->
 </head>
 
 <body>
